@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 0 — Required Reading Summary / 0주차 필독 자료 정리</title>
+<style>
+  :root{
+    --accent:#1f5fa8; --accent2:#2c7a4b; --bg:#f7f8fa; --card:#fff;
+    --en-bg:#f4f8fd; --ko-bg:#f3faf5; --border:#e1e5ea; --ink:#222; --muted:#667;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",Arial,sans-serif;
+       color:var(--ink);background:var(--bg);line-height:1.6;}
+  header{background:linear-gradient(135deg,#1f5fa8,#2c7a4b);color:#fff;padding:34px 24px;}
+  header h1{margin:0 0 6px;font-size:1.7rem;}
+  header p{margin:2px 0;opacity:.95;font-size:.95rem;}
+  .wrap{max-width:980px;margin:0 auto;padding:24px;}
+  .controls{position:sticky;top:0;z-index:10;background:var(--bg);padding:12px 0;border-bottom:1px solid var(--border);
+            display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .controls span{font-size:.85rem;color:var(--muted);margin-right:4px;}
+  .controls button{border:1px solid var(--accent);background:#fff;color:var(--accent);border-radius:20px;
+                   padding:5px 14px;font-size:.85rem;cursor:pointer;}
+  .controls button.active{background:var(--accent);color:#fff;}
+  nav.toc{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin:20px 0;}
+  nav.toc h2{margin:0 0 10px;font-size:1.05rem;color:var(--accent);}
+  nav.toc ol{margin:0;padding-left:22px;}
+  nav.toc li{margin:3px 0;}
+  nav.toc a{color:var(--ink);text-decoration:none;}
+  nav.toc a:hover{color:var(--accent);text-decoration:underline;}
+  section.reading{background:var(--card);border:1px solid var(--border);border-radius:10px;
+                  padding:20px 24px;margin:18px 0;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  section.reading>h2{margin:0 0 14px;font-size:1.3rem;color:var(--accent);border-bottom:2px solid var(--accent);
+                     padding-bottom:8px;}
+  .ko-title{font-size:.95rem;color:var(--muted);font-weight:600;}
+  h3.group{margin:22px 0 8px;font-size:1.05rem;color:var(--accent2);
+           background:#eef6f0;padding:6px 12px;border-radius:6px;}
+  .intro{margin:6px 0 14px;}
+  .tactic,.concept{margin:14px 0;padding:12px 16px;border:1px solid var(--border);border-radius:8px;background:#fcfcfd;}
+  .tactic h3,.concept h3{margin:0 0 8px;font-size:1.05rem;}
+  .tactic h3 .ko,.concept h3 .ko{font-size:.85rem;color:var(--muted);font-weight:500;}
+  p.en{background:var(--en-bg);border-left:3px solid var(--accent);padding:8px 12px;margin:6px 0;border-radius:0 6px 6px 0;}
+  p.ko{background:var(--ko-bg);border-left:3px solid var(--accent2);padding:8px 12px;margin:6px 0;border-radius:0 6px 6px 0;}
+  p.en::before{content:"EN  ";font-weight:700;color:var(--accent);font-size:.72rem;}
+  p.ko::before{content:"KO  ";font-weight:700;color:var(--accent2);font-size:.72rem;}
+  body.hide-en p.en{display:none;}
+  body.hide-ko p.ko{display:none;}
+  .defbox{background:#fff8e6;border:1px solid #e8d48a;border-left:5px solid #d8a72b;border-radius:8px;
+          padding:12px 16px;margin:12px 0;}
+  .defbox .label{font-weight:700;color:#9a7611;font-size:.8rem;letter-spacing:.04em;}
+  .manifesto{background:#eef4fb;border:1px solid #c7d8ee;border-radius:8px;padding:16px 20px;margin:14px 0;}
+  .manifesto .label{font-weight:700;color:var(--accent);font-size:.82rem;}
+  .manifesto ul{margin:8px 0;padding-left:20px;}
+  .manifesto li{margin:5px 0;}
+  .manifesto .over{color:#b03030;font-weight:600;}
+  footer{text-align:center;color:var(--muted);font-size:.82rem;padding:24px;}
+  .src{font-size:.82rem;color:var(--muted);margin:4px 0 0;}
+  em{color:#0a3d62;font-style:normal;font-weight:600;}
+</style>
+</head>
+<body>
+<header>
+  <h1>Week 0 — Required Reading Summary</h1>
+  <p>0주차 필독 자료 정리 · 영문 / 한국어 (English / Korean)</p>
+  <p>Source: [Clements10] <i>Documenting Software Architectures: Views and Beyond</i>, 2nd ed.</p>
+</header>
+
+<div class="wrap">
+
+<div class="controls">
+  <span>Language / 언어:</span>
+  <button id="btn-both" class="active" onclick="setLang('both')">Both / 둘 다</button>
+  <button id="btn-en" onclick="setLang('en')">English only</button>
+  <button id="btn-ko" onclick="setLang('ko')">한국어만</button>
+</div>
+
+<nav class="toc">
+  <h2>Contents / 목차</h2>
+  <ol>
+    <li><a href="#p11">[Clements10] §P.1.1 — Overview (What is Software Architecture)</a></li>
+    <li><a href="#e41">[Clements10] §E.4.1 — Overview (Documenting Architecture in an Agile Project)</a></li>
+  </ol>
+</nav>
+
+<section class="reading" id="p11">
+  <h2>[Clements10] §P.1.1 &mdash; A Short Overview of Software Architecture: Overview <span class="ko-title">(소프트웨어 아키텍처 개관)</span></h2>
+
+  <div class="defbox">
+    <div class="label">DEFINITION / 정의 (margin note)</div>
+    <p class="en">The software architecture of a computing system is the set of <b>structures</b> needed to reason about the system, which comprise <b>software elements</b>, <b>relations</b> among them, and <b>properties</b> of both.</p>
+    <p class="ko">컴퓨팅 시스템의 소프트웨어 아키텍처란, 시스템을 추론(reason)하는 데 필요한 <b>구조(structure)의 집합</b>이며, 이는 <b>소프트웨어 요소(element)</b>, 요소 간의 <b>관계(relation)</b>, 그리고 이 둘의 <b>속성(property)</b>으로 구성된다.</p>
+  </div>
+
+  <div class="concept"><h3>Architecture as partitioning <span class="ko">분할로서의 아키텍처</span></h3>
+    <p class="en">Software architecture has emerged as an important subdiscipline of software engineering. Architecture is roughly the prudent <em>partitioning of a whole into parts, with specific relations among the parts</em>. This partitioning is what allows groups of people&mdash;often separated by organizational, geographical, and even time-zone boundaries&mdash;to work cooperatively and productively to solve a problem much larger than any of them could solve individually. Each group writes software that interacts with the others through carefully crafted interfaces that reveal the minimal and most stable information necessary for interaction.</p>
+    <p class="ko">소프트웨어 아키텍처는 소프트웨어 공학의 중요한 하위 분야로 부상했다. 아키텍처는 대략 <em>전체를 부분으로 신중하게 분할하고, 그 부분들 사이에 특정한 관계를 부여하는 것</em>이다. 이러한 분할 덕분에, 조직·지역·시간대 경계로 흔히 분리되어 있는 사람들의 그룹이 협력적이고 생산적으로 일하여, 개별적으로는 풀 수 없는 훨씬 큰 문제를 해결할 수 있다. 각 그룹은 상호작용에 필요한 최소한의 가장 안정적인 정보만 드러내는 정교한 인터페이스를 통해 다른 그룹의 소프트웨어와 상호작용하는 소프트웨어를 작성한다.</p>
+  </div>
+
+  <div class="concept"><h3>Why architecture matters more as systems grow <span class="ko">시스템이 커질수록 중요해지는 이유</span></h3>
+    <p class="en">From the interaction of the parts emerge the functionality and the quality attributes&mdash;security, modifiability, performance, and so forth&mdash;that the system's stakeholders demand. The larger and more complex the system, the more critical this partitioning is&mdash;and hence the architecture. And the more demanding those quality attributes are, the more critical the architecture becomes.</p>
+    <p class="ko">부분들 간의 상호작용으로부터, 시스템 이해관계자가 요구하는 기능과 품질 속성(보안·변경용이성·성능 등)이 창발(emerge)한다. 시스템이 더 크고 복잡할수록 이 분할, 즉 아키텍처가 더욱 중요해진다. 또한 요구되는 품질 속성이 까다로울수록 아키텍처는 더 결정적으로 중요해진다.</p>
+  </div>
+
+  <div class="concept"><h3>Multiple simultaneous structures <span class="ko">동시에 존재하는 여러 구조</span></h3>
+    <p class="en">A single system is almost inevitably partitioned simultaneously in a number of different ways. Each partitioning results in the creation of an <em>architectural structure</em>: a different set of parts and different relations among them. Each is the result of careful design carried out to satisfy the driving quality attribute requirements and the most important business goals behind the system.</p>
+    <p class="ko">하나의 시스템은 거의 필연적으로 여러 다른 방식으로 동시에 분할된다. 각 분할은 하나의 <em>아키텍처 구조(architectural structure)</em>를 만들어낸다. 즉 서로 다른 부분들의 집합과 그 부분들 사이의 서로 다른 관계가 생긴다. 각각은 시스템을 주도하는 품질 속성 요구사항과 가장 중요한 비즈니스 목표를 충족하기 위해 신중하게 수행된 설계의 결과다.</p>
+  </div>
+
+  <div class="concept"><h3>The role of architecture documentation <span class="ko">아키텍처 문서화의 역할</span></h3>
+    <p class="en">Architecture is what makes the sets of parts work together as a coherent and successful whole. Architecture documentation helps architects make the right decisions; it tells developers how to carry them out; and it records those decisions to give a system's future caretakers insight into the architect's solution.</p>
+    <p class="ko">아키텍처는 부분들의 집합이 일관되고 성공적인 하나의 전체로서 함께 동작하도록 만드는 것이다. 아키텍처 문서는 아키텍트가 올바른 결정을 내리도록 돕고, 개발자에게 그 결정을 어떻게 수행할지 알려주며, 그 결정을 기록하여 시스템의 미래 관리자(유지보수자)가 아키텍트의 해결책을 이해할 수 있게 한다.</p>
+  </div>
+  <p class="src">[Clements10] Prologue §P.1.1 (sidebars "What Is Software Architecture?" 등 보조 박스는 필독 대상에서 제외)</p>
+</section>
+
+<section class="reading" id="e41">
+  <h2>[Clements10] §E.4.1 &mdash; Documenting Architecture in an Agile Development Project: Overview <span class="ko-title">(애자일 프로젝트에서의 아키텍처 문서화)</span></h2>
+
+  <div class="concept"><h3>What "Agile" means <span class="ko">"애자일"의 의미</span></h3>
+    <p class="en">"Agile" refers to an approach to software development that emphasizes rapid and flexible development and deemphasizes project and process infrastructure for their own sake. The Agile <em>Manifesto</em> (Figure E.4) has served since 2001 as the movement's guiding desiderata.</p>
+    <p class="ko">"애자일(Agile)"은 빠르고 유연한 개발을 강조하고, 그 자체가 목적이 되어버린 프로젝트·프로세스 인프라(절차적 형식)는 덜 강조하는 소프트웨어 개발 접근법을 가리킨다. 애자일 <em>선언문(Manifesto)</em>(Figure E.4)은 2001년 이래 이 운동의 지향점 역할을 해 왔다.</p>
+  </div>
+
+  <div class="manifesto">
+    <div class="label">FIGURE E.4 — The Manifesto for Agile Software Development (Agile Alliance, 2001) / 애자일 소프트웨어 개발 선언문</div>
+    <p class="en">We are uncovering better ways of developing software by doing it and helping others do it. Through this work we have come to value:</p>
+    <ul>
+      <li class="en">Individuals and interactions <span class="over">over</span> processes and tools</li>
+      <li class="en">Working software <span class="over">over</span> comprehensive documentation</li>
+      <li class="en">Customer collaboration <span class="over">over</span> contract negotiation</li>
+      <li class="en">Responding to change <span class="over">over</span> following a plan</li>
+    </ul>
+    <p class="en"><i>That is, while there is value in the items on the right, we value the items on the left more.</i></p>
+    <p class="ko">우리는 소프트웨어를 직접 개발하고 다른 이들의 개발을 도우면서 더 나은 개발 방법을 찾아가고 있다. 이 작업을 통해 우리는 다음 가치를 중시하게 되었다:</p>
+    <ul>
+      <li class="ko">공정과 도구 <span class="over">보다</span> 개인과 상호작용을</li>
+      <li class="ko">포괄적인 문서 <span class="over">보다</span> 작동하는 소프트웨어를</li>
+      <li class="ko">계약 협상 <span class="over">보다</span> 고객과의 협력을</li>
+      <li class="ko">계획을 따르기 <span class="over">보다</span> 변화에 대응하기를</li>
+    </ul>
+    <p class="ko"><i>즉, 오른쪽 항목에도 가치가 있지만 우리는 왼쪽 항목에 더 높은 가치를 둔다.</i></p>
+  </div>
+
+  <div class="concept"><h3>Agile methods and common practices <span class="ko">애자일 방법론과 공통 실천법</span></h3>
+    <p class="en">There are many methodological instantiations of Agile, including Extreme Programming (XP), Scrum, Feature-Driven Development, and Crystal Clear. Practices that show up across the methods include: <em>User stories</em> (text specifying functional requirements as the actions of people); <em>Test-driven development</em> (developers create automated tests at the same time they write the tested code); <em>Short iterations</em> (the plan consists of short iterations of a few weeks, also called sprints); <em>Pair programming</em> (two developers work together, one typing code and the other reviewing for defects and design improvements); and <em>Refactoring</em> (code is restructured to improve internal structure and maintainability without altering externally visible behavior).</p>
+    <p class="ko">애자일에는 여러 방법론적 구현체가 있으며, 익스트림 프로그래밍(XP), 스크럼(Scrum), 기능 주도 개발(FDD), 크리스털 클리어(Crystal Clear) 등이 있다. 여러 방법론에 공통으로 나타나는 실천법은 다음과 같다: <em>사용자 스토리</em>(사람의 행동으로 기능 요구사항을 기술하는 텍스트), <em>테스트 주도 개발(TDD)</em>(개발자가 대상 코드를 작성하는 동시에 자동화 테스트를 만든다), <em>짧은 반복(이터레이션)</em>(개발 계획이 몇 주 단위의 짧은 반복, 즉 스프린트로 구성됨), <em>짝 프로그래밍</em>(두 개발자가 함께 일하며 한 명은 코드를 작성하고 다른 한 명은 결함과 설계 개선점을 검토), <em>리팩터링</em>(외부에 보이는 동작은 바꾸지 않으면서 내부 구조와 유지보수성을 개선하도록 코드를 재구성).</p>
+  </div>
+
+  <div class="concept"><h3>Misconception 1: Agile is anti-documentation <span class="ko">오해 1: 애자일은 문서를 반대한다</span></h3>
+    <p class="en">For some, "agility" is used as an excuse to avoid disciplined development. But saying that Agile development is antithetical to documented development is simply not true&mdash;if indeed it ever was. Agile does not reject documentation; it rejects documentation that has no use.</p>
+    <p class="ko">일부 사람들은 "민첩함(agility)"을 규율 있는 개발을 회피하기 위한 핑계로 사용한다. 그러나 애자일 개발이 문서화된 개발과 상반된다는 말은 사실이 아니다(설령 과거에 그랬더라도). 애자일은 문서화 자체를 거부하는 것이 아니라, 쓸모없는 문서를 거부하는 것이다.</p>
+  </div>
+
+  <div class="concept"><h3>Misconception 2: coding starts on day one <span class="ko">오해 2: 첫날부터 코딩을 시작한다</span></h3>
+    <p class="en">A related misconception is that in Agile, coding starts on day one of the project. In practice, the first iteration can go by with no production code written at all&mdash;because the team is sorting out design alternatives and conducting technical experiments with different frameworks, platforms, or technologies.</p>
+    <p class="ko">이와 관련된 또 다른 오해는 애자일에서는 프로젝트 첫날부터 코딩을 시작한다는 것이다. 실제로는 첫 번째 반복(이터레이션) 동안 제품 코드를 전혀 작성하지 않고 지나갈 수도 있다. 팀이 설계 대안을 정리하고 서로 다른 프레임워크·플랫폼·기술로 기술적 실험을 수행하기 때문이다.</p>
+  </div>
+
+  <div class="concept"><h3>Avoid Big Design Up Front (BDUF) <span class="ko">사전 거대 설계(BDUF) 회피</span></h3>
+    <p class="en">The key goal of design and modeling in Agile projects is <em>not</em> to avoid designing, but to avoid "big design up front" (BDUF). Broad and far-reaching architecture strategies are worked out up front, but many other design decisions can be deferred until needed&mdash;and they can be written down whenever they are made.</p>
+    <p class="ko">애자일 프로젝트에서 설계와 모델링의 핵심 목표는 설계를 <em>회피</em>하는 것이 아니라 "사전 거대 설계(Big Design Up Front, BDUF)"를 피하는 것이다. 광범위하고 파급력이 큰 아키텍처 전략은 사전에 도출하되, 그 밖의 많은 설계 결정은 필요할 때까지 미룰 수 있으며, 결정이 내려질 때마다 기록하면 된다.</p>
+  </div>
+
+  <div class="concept"><h3>Fewer, coarser design decisions <span class="ko">더 적고 거친 설계 결정</span></h3>
+    <p class="en">Documented design decisions in Agile projects tend to be (but are not always) fewer in number and coarser in granularity than those documented in traditional projects. This is because Agile developers are expected to have design skills, and Agile designers/architects are expected to have coding skills&mdash;so the communication of design decisions is shorter and denser. It is rather like telling a story to a member of your family rather than to a complete stranger.</p>
+    <p class="ko">애자일 프로젝트에서 문서화되는 설계 결정은 (항상은 아니지만) 전통적 프로젝트보다 수가 적고 입자(granularity)가 더 거친 경향이 있다. 이는 애자일 개발자가 설계 능력을, 애자일 설계자·아키텍트가 코딩 능력을 갖추고 있다고 기대되기 때문이며, 그 결과 설계 결정의 의사소통이 더 짧고 밀도 높게 이루어진다. 이는 마치 완전한 낯선 사람이 아니라 가족에게 이야기를 들려주는 것과 비슷하다.</p>
+  </div>
+  <p class="src">[Clements10] Epilogue §E.4.1 (E.4.2 이하 및 보조 박스는 필독 대상에서 제외)</p>
+</section>
+
+<footer>
+  <p>Week 0 Required Reading — bilingual summary compiled from [Clements10] <i>Documenting Software Architectures: Views and Beyond</i> (2nd ed.).<br>
+  본 문서는 0주차 필독 자료의 해당 절을 발췌·요약한 영문/한국어 정리본입니다. 정확한 표현은 원문을 참조하세요.</p>
+</footer>
+
+</div>
+
+<script>
+function setLang(mode){
+  document.body.classList.remove('hide-en','hide-ko');
+  document.getElementById('btn-both').classList.remove('active');
+  document.getElementById('btn-en').classList.remove('active');
+  document.getElementById('btn-ko').classList.remove('active');
+  if(mode==='en'){document.body.classList.add('hide-ko');document.getElementById('btn-en').classList.add('active');}
+  else if(mode==='ko'){document.body.classList.add('hide-en');document.getElementById('btn-ko').classList.add('active');}
+  else{document.getElementById('btn-both').classList.add('active');}
+}
+</script>
+</body>
+</html>
