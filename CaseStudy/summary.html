@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>요약: SafePlant Manufacturing 사례 연구 실습</title>
+<style>
+  :root { --accent:#2f6f8f; --ink:#222; --muted:#555; }
+  * { box-sizing:border-box; }
+  body {
+    font-family:"Malgun Gothic","맑은 고딕",system-ui,-apple-system,sans-serif;
+    line-height:1.65; color:var(--ink); max-width:840px; margin:0 auto;
+    padding:44px 26px 88px; background:#fff;
+  }
+  h1 { color:var(--accent); font-size:1.7rem; border-bottom:3px solid var(--accent);
+       padding-bottom:.4em; margin-top:0; }
+  h2 { color:var(--accent); font-size:1.25rem; margin-top:1.9em;
+       border-bottom:1px solid #d6e3ea; padding-bottom:.2em; }
+  ul,ol { padding-left:1.4em; }
+  li { margin:.28em 0; }
+  p { margin:.6em 0; }
+  .tag { font-weight:700; }
+  table { border-collapse:collapse; width:100%; margin:.8em 0; font-size:.95rem; }
+  th,td { border:1px solid #cdd9e0; padding:7px 9px; text-align:left; vertical-align:top; }
+  th { background:#eef4f7; color:var(--accent); }
+  .card { background:#f7fafb; border:1px solid #dde7ec; border-radius:8px;
+          padding:.4em 1.1em; margin:1em 0; }
+  .pill { display:inline-block; background:var(--accent); color:#fff;
+          font-size:.78rem; padding:2px 9px; border-radius:20px; margin-right:6px; }
+  footer { margin-top:3.4em; padding-top:1em; border-top:1px solid #ddd;
+           color:var(--muted); font-size:.85rem; }
+  .tl;dr { }
+</style>
+</head>
+<body>
+
+<h1>요약 — SafePlant Manufacturing 사례 연구 실습</h1>
+
+<div class="card">
+  <p><span class="pill">한 줄 요약</span> 노후화된(2010년) "전량 클라우드 전송" 공장
+  모니터링 시스템을, <strong>엣지 지능 기반</strong> 차세대 시스템으로 재설계하는 45분
+  팀 아키텍처 설계 과제. 핵심 긴장 관계는 <strong>실시간 안전·예측 정비</strong> ↔
+  <strong>불안정한 네트워크·데이터 프라이버시·클라우드 비용 절감</strong>이다.</p>
+</div>
+
+<h2>상황 (Context)</h2>
+<ul>
+  <li><span class="tag">현재 문제:</span> 모든 원시 센서 데이터를 클라우드로 스트리밍 →
+      비용 과다, 단순 임계값 기반 탐지(예측 불가), 종이·달력 기반 예방 정비.</li>
+  <li><span class="tag">규모:</span> 펌프 500, 공작기계 200, 화학 탱크 50, 보안 카메라
+      100. 센서 샘플링 평균 10Hz.</li>
+  <li><span class="tag">네트워크:</span> 공장 현장은 HaLow WiFi 5Mbps, 가용성 약
+      <strong>85%</strong>(중단 빈번) → 오프라인 동작 필수.</li>
+</ul>
+
+<h2>반드시 충족할 핵심 요구사항</h2>
+<ol>
+  <li>실시간 <strong>이상/위험 상황 탐지</strong> (안전)</li>
+  <li><strong>예측 정비</strong> (고장 사전 탐지)</li>
+  <li>런타임 중 탐지·예측 <strong>정확도 개선</strong></li>
+  <li><strong>24×7 운영</strong> + 네트워크 중단 중에도 지속</li>
+  <li>민감한 <strong>원시 데이터 보호</strong></li>
+  <li>정비 보고서 <strong>자동 생성</strong> (버튼식)</li>
+  <li>내·외부 기술자용 <strong>보안 상태 페이지</strong>(분석 포함)</li>
+  <li><strong>클라우드 비용 최소화</strong></li>
+  <li>센서 노드 <strong>OTA 업데이트</strong></li>
+  <li><strong>확장성</strong>(새 기계 센서 손쉬운 추가)</li>
+</ol>
+
+<h2>핵심 제약 조건</h2>
+<table>
+  <tr><th>영역</th><th>핵심 내용</th></tr>
+  <tr><td>장치 등급</td><td>A: M33 $10 / B: A53 2GB $150 / C: Jetson Orin NX 8GB $750 — 이 셋만 사용</td></tr>
+  <tr><td>프라이버시</td><td>원시 운영 데이터 공장 밖 반출 금지. 익명화 데이터(집계 통계·모델 가중치·특징 벡터)만 전송 가능. 식별 정보(fingerprint) 반출 불가</td></tr>
+  <tr><td>온프레미스 서버</td><td>32코어 / 128GB RAM / 확장 저장소 — 현재 미활용. 민감 데이터 저장 가능. 현장망 최대 10Mbps</td></tr>
+  <tr><td>클라우드</td><td>사실상 무제한 컴퓨팅·대형 AI 모델·중앙 저장소. 사용량 과금, 지연 200~500ms</td></tr>
+  <tr><td>센서 종류</td><td>진동 / 온·습도 / 음향 / 가스·연기 / 기계 작동 상태</td></tr>
+</table>
+
+<h2>설계 시 답해야 할 5가지 (힌트)</h2>
+<ol>
+  <li><span class="tag">시스템 토폴로지:</span> 서버·센서·중간 노드 배치와 분할 근거.</li>
+  <li><span class="tag">연결성 전략:</span> 최악의 중단 시 반드시 동작해야 할 기능과
+      장애 내성 설계.</li>
+  <li><span class="tag">모델 전략 & 지능 배치:</span> 모델 유형·역할·위치·학습 방법,
+      업데이트 시점 판단 및 실패 배포 관리.</li>
+  <li><span class="tag">데이터 관리:</span> 엣지/운영센터/클라우드 데이터 분배,
+      학습 데이터 저장 위치, 보안(프라이버시·비용·대역폭).</li>
+  <li><span class="tag">확장성:</span> 아래 품질 속성 시나리오 충족.</li>
+</ol>
+
+<div class="card">
+  <p><span class="pill">확장성 시나리오</span>
+  새 기계에 <strong>센서 노드 12개</strong>를 부착 → 기존 인프라/네트워크에서,
+  <strong>다운타임 0, 3일 이내</strong>에 부착·보정·통합 완료.</p>
+</div>
+
+<h2>그 밖의 설계 동인</h2>
+<ul>
+  <li>기존 시스템 개발 비용 최소화</li>
+  <li>시스템 지연 시간 최소화</li>
+  <li>실시간 탐지 오탐(false positive) 최소화 → 센서 정확도 극대화</li>
+  <li>예측 정비 정확도 극대화</li>
+</ul>
+
+<h2>출제 의도 핵심 포인트</h2>
+<p>
+"정답은 없다 — 아키텍처 <strong>결정·근거·트레이드오프</strong>를 논하라." 사실상 다음을
+요구하는 설계 문제다: 비용·프라이버시·네트워크 불안정 때문에 <strong>지능을 클라우드에서
+엣지(센서 노드 + 온프레미스 서버)로 이동</strong>시키되, 클라우드는 무거운 학습·대형 모델
+역할로 한정하는 <strong>3계층(엣지–온프레미스–클라우드) 하이브리드 구조</strong>를 어떻게
+구성할 것인가.
+</p>
+
+<footer>
+  원문: <em>In-Class Study Exercise: SafePlant Manufacturing</em> (Lattanze Case Study Exercise) — 한국어 요약본
+</footer>
+
+</body>
+</html>
